@@ -24,7 +24,7 @@ window.onload = function() {
 			this.vx = vx;
 			this.vy = vy;
 			this.time = 0;
-			this.life = Math.floor(Math.random()*500);
+			this.life = Math.floor(Math.random()*200);
 		}
 	
 		this.setColor = function(color){
@@ -109,10 +109,11 @@ window.onload = function() {
 			//console.log(this.leader + " " + this.phytoplankton[this.leader].life + " " + this.phytoplankton[this.leader].time);
 			if (this.phytoplankton[this.leader].time >= this.phytoplankton[this.leader].life){
 				this.phytoplankton[this.leader].setColor("#446644");
-				//this.leader = Math.floor(Math.random()*this.n);
+				this.leader = Math.floor(Math.random()*this.n);
 				this.phytoplankton[this.leader].setColor("#ffffff");
-				this.leaderXdestination = Math.floor(Math.random()*this.x0);
-				this.leaderYdestination = Math.floor(Math.random()*this.x0);
+				this.leaderXdestination = Math.floor(Math.random()*this.x1);
+				this.leaderYdestination = Math.floor(Math.random()*this.y1);
+				console.log(this.leaderXdestination + " " + this.x1);
 			}
 			
 			if(this.leaderXdestination > this.phytoplankton[this.leader].x){
