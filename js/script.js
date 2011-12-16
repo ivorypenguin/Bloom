@@ -54,7 +54,7 @@ window.onload = function() {
 		this.kill = function(){
 			//console.dir(this);
 			this.setValues(Math.floor(Math.random()*canvas.width), Math.floor(Math.random()*canvas.height), 1, 1);
-			this.setColor("#8a360f");
+			//this.setColor("#8a360f");
 		}
 		
 		// overload the particle render
@@ -82,8 +82,8 @@ window.onload = function() {
 	
 		this.n = 0;
 		this.phytoplankton = [];
-		this.yinertia = 0.01;
-		this.xinertia = 0.01;
+		this.yinertia = 1.0;
+		this.xinertia = 1.0;
 		
 		this.init = function(n, x0, y0, x1, y1, backColor){
 			this.n = n;
@@ -106,14 +106,16 @@ window.onload = function() {
 		}
 		
 		this.updateLeader = function(){
-			//console.log(this.leader + " " + this.phytoplankton[this.leader].life + " " + this.phytoplankton[this.leader].time);
+			console.log(this.leader + " " + this.phytoplankton[this.leader].life + " " + this.phytoplankton[this.leader].time);
 			if (this.phytoplankton[this.leader].time >= this.phytoplankton[this.leader].life){
 				this.phytoplankton[this.leader].setColor("#446644");
 				this.leader = Math.floor(Math.random()*this.n);
 				this.phytoplankton[this.leader].setColor("#ffffff");
 				this.leaderXdestination = Math.floor(Math.random()*this.x1);
 				this.leaderYdestination = Math.floor(Math.random()*this.y1);
-				console.log(this.leaderXdestination + " " + this.x1);
+
+				//add another phytoplankton when the leader changes...
+				this.phytoplankton.push(new Phytoplankton());
 			}
 			
 			if(this.leaderXdestination > this.phytoplankton[this.leader].x){
@@ -134,19 +136,25 @@ window.onload = function() {
 			for(var i=0; i<this.phytoplankton.length; i++) {
 				if(i != this.leader){
 					if (this.phytoplankton[i].time < this.phytoplankton[i].life) {
-						this.phytoplankton[i].vy = this.phytoplankton[i].vy + this.yinertia;
-						this.phytoplankton[i].vx = this.phytoplankton[i].vx + this.xinertia;
-						if(this.phytoplankton[this.leader].x > this.phytoplankton[i].x){
-							this.phytoplankton[i].x = this.phytoplankton[i].x + this.phytoplankton[i].vx;
+						var xdiff = this.phytoplankton[this.leader].x - this.phytoplankton[i].x;
+						var ydiff = this.phytoplankton[this.leader].y - this.phytoplankton[i].y;
+						
+						if(xdiff > 0){
+							this.phytoplankton[i].vx =  this.xinertia * (Math.sin(1 - 1/xdiff));
+						
 						} else {
-							this.phytoplankton[i].x = this.phytoplankton[i].x - this.phytoplankton[i].vx;
+							this.phytoplankton[i].vx =  this.xinertia * (Math.sin(-1 + 1/xdiff));
 						}
-					
-						if(this.phytoplankton[this.leader].y > this.phytoplankton[i].y){
-							this.phytoplankton[i].y = this.phytoplankton[i].y + this.phytoplankton[i].vy;
+						
+						if(ydiff > 0){
+							this.phytoplankton[i].vy =  this.yinertia * (Math.sin(1 - 1/ydiff));
 						} else {
-							this.phytoplankton[i].y = this.phytoplankton[i].y - this.phytoplankton[i].vy;
+							this.phytoplankton[i].vy =  this.yinertia * (Math.sin(-1 + 1/ydiff));
 						}
+						console.log(this.phytoplankton[1].vx)
+						this.phytoplankton[i].y = this.phytoplankton[i].y + this.phytoplankton[i].vy;
+						this.phytoplankton[i].x = this.phytoplankton[i].x + this.phytoplankton[i].vx;
+						
 					} else {
 						this.phytoplankton[i].kill();
 					}
