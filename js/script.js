@@ -44,8 +44,17 @@ window.onload = function() {
 	}
 
 	//phytoplankton extends the Particle class allowing us to overload it later
-	function Phytoplankton(){
-	
+	function Phytoplankton(x0, y0, x1, y1){
+		this.x0 = x0;
+		this.x1 = x1;
+		this.y0 = y0;
+		this.y1 = y1;
+		
+		this.kill = function(){
+			//console.dir(this);
+			this.setValues(Math.floor(Math.random()*canvas.width), Math.floor(Math.random()*canvas.height), 1, 1);
+			this.setColor("#8a360f");
+		}
 	}
 	Phytoplankton.prototype = new Particle; // inherit from Particle
 
@@ -84,10 +93,10 @@ window.onload = function() {
 		}
 		
 		this.updateLeader = function(){
-			console.log(this.leader + " " + this.phytoplankton[this.leader].life + " " + this.phytoplankton[this.leader].time);
+			//console.log(this.leader + " " + this.phytoplankton[this.leader].life + " " + this.phytoplankton[this.leader].time);
 			if (this.phytoplankton[this.leader].time >= this.phytoplankton[this.leader].life){
 				this.phytoplankton[this.leader].setColor("#446644");
-				this.leader = Math.floor(Math.random()*this.n);
+				//this.leader = Math.floor(Math.random()*this.n);
 				this.phytoplankton[this.leader].setColor("#ffffff");
 				this.leaderXdestination = Math.floor(Math.random()*this.x0);
 				this.leaderYdestination = Math.floor(Math.random()*this.x0);
@@ -125,8 +134,7 @@ window.onload = function() {
 							this.phytoplankton[i].y = this.phytoplankton[i].y - this.phytoplankton[i].vy;
 						}
 					} else {
-						this.phytoplankton[i].setValues(Math.floor(Math.random()*this.x1) +this.x0, Math.floor(Math.random() * this.y1) + this.y0, 0, 1);
-						this.phytoplankton[i].setColor("#8a360f");
+						this.phytoplankton[i].kill();
 					}
 				} // stop omitting leader
 				this.phytoplankton[i].time += 1;
