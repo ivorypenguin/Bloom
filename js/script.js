@@ -43,7 +43,8 @@ window.onload = function() {
 		}
 	}
 
-	//phytoplankton extends the Particle class allowing us to overload it later
+	// phytoplankton extends the Particle class allowing us to overload it later
+	// this is the best place to change what the phytoplankton appears like
 	function Phytoplankton(x0, y0, x1, y1){
 		this.x0 = x0;
 		this.x1 = x1;
@@ -54,6 +55,18 @@ window.onload = function() {
 			//console.dir(this);
 			this.setValues(Math.floor(Math.random()*canvas.width), Math.floor(Math.random()*canvas.height), 1, 1);
 			this.setColor("#8a360f");
+		}
+		
+		// overload the particle render
+		// currently they're just half of the size
+		this.render = function(){
+			c.save();
+			c.fillStyle = this.color;
+			c.translate(this.x, this.y);
+			c.beginPath();
+			c.arc(0, 0, 5, 0, Math.PI*2, true); // draw a circle
+			c.fill();
+			c.restore();
 		}
 	}
 	Phytoplankton.prototype = new Particle; // inherit from Particle
